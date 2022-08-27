@@ -1,0 +1,60 @@
+<div class="container">
+  <nav class="p-2 m-2">
+    <button *ngIf="(authService.hasRole('ADMIN') | async)" class="btn btn-outline-info" (click)="newProduct()">
+      New product
+    </button>
+  </nav>
+  <div class="card">
+    <div class="card-header">Products</div>
+    <ng-template #errors>
+      <div class="text-danger">{{ errorMessage }}</div>
+    </ng-template>
+
+    <div class="card-body" *ngIf="products; else errors">
+      <form [formGroup]="searchFormGroup" (ngSubmit)="filter()">
+        <div class="input-group">
+          <label class="input-group-text">keyword:</label> <input type="text" class="form-control" formControlName="keyword" />
+          <button class="btn btn-info"><i class="bi bi-search"></i></button>
+        </div>
+      </form>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Promotion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of products">
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price }}</td>
+            <td><i *ngIf="p.promotion" class="bi bi-heart-fill text-success"></i></td>
+            <td *ngIf="(authService.hasRole('ADMIN') | async)">
+              <button (click)="handlePromotion(p)" [ngClass]="p.promotion ? 'btn btn-danger' : 'btn btn-success'">
+                <span *ngIf="p.promotion === true">Promo Off</span> <span *ngIf="p.promotion === false">Promo On</span>
+              </button>
+            </td>
+            <td *ngIf="(authService.hasRole('ADMIN') | async)">
+              <button [routerLink]="['/admin/edit-product', p.id]" class="btn btn-info">
+                <i class="bi bi-pen"> </i>
+              </button>
+            </td>
+            <td *ngIf="(authService.hasRole('ADMIN') | async)">
+              <button (click)="handleDleteProduct(p)" class="btn btn-danger"><i class="bi bi-trash"> </i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="nav nav-pills">
+        <li *ngFor="let page of [].constructor(total); let i = index">
+          <a (click)="selectPage(i)" [ngClass]="i === currentPage ? 'btn-info ' : 'btn-outline-info'" class="btn ms-1 mt-1">{{
+            i + 1
+          }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

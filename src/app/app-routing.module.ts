@@ -1,10 +1,49 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { AdminTemplateComponent } from "./admin-template/admin-template.component";
+import { CustomersComponent } from "./customers/customers.component";
+import { EditProductComponent } from "./edit-product/edit-product.component";
+import { AuthenticationGuard } from "./guard/authentication.guard";
+import { LoginComponent } from "./login/login.component";
+import { NewProductComponent } from "./new-product/new-product.component";
+import { ProductsComponent } from "./products/products.component";
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: "",
+    redirectTo: "login",
+    pathMatch: "full"
+  },
+  {
+    path: "login",
+    component: LoginComponent
+  },
+  {
+    path: "admin",
+    component: AdminTemplateComponent, canActivate: [AuthenticationGuard],
+    children: [
+      {
+        path: "products",
+        component: ProductsComponent
+      },
+      {
+        path: "customers",
+        component: CustomersComponent
+      },
+      {
+        path: "new-product",
+        component: NewProductComponent
+      },
+      {
+        path: "edit-product/:id",
+        component: EditProductComponent
+      }
+    ]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

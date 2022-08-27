@@ -1,0 +1,22 @@
+<div class="container mt-3 col-md-6 offset-md-3">
+   
+  <form [formGroup]="productForm" (submit)="submit()">
+    <div class="mb-3">
+      <label class="form-label">Name</label> <input class="form-control" formControlName="name" type="text" />
+      <small *ngIf="productForm.controls['name'].errors && productForm.controls['name'].touched" class="text-danger">
+        {{ utils.getErrorMessage("Name", productForm.controls["name"].errors) }}
+      </small>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Price</label> <input class="form-control" formControlName="price" type="text" />
+      <small *ngIf="productForm.controls['price'].errors && productForm.controls['price'].touched" class="text-danger">
+         {{ utils.getErrorMessage("Price", productForm.controls["price"].errors) }}
+      </small>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Promotion</label> <input class="form-check" formControlName="promotion" type="checkbox" />
+    </div>
+    <button [disabled]="productForm.invalid" class="btn btn-info" type="submit">Créer</button>
+  </form>
+</div>
+
